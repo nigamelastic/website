@@ -1,0 +1,139 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  directory: string;
+}
+
+const { directory } = Astro.props;
+
+// Fetch all docs and filter by the specified directory
+const allDocs = await getCollection('docs');
+const pages = allDocs
+  .filter(page => {
+    // Ensure it's in the right directory and NOT the index page itself
+    return page.id.startsWith(directory + '/') && !page.id.endsWith('index.mdx');
+  })
+  .sort((a, b) => {
+    const dateA = a.data.publishDate ? new Date(a.data.publishDate) : new Date(0);
+    const dateB = b.data.publishDate ? new Date(b.data.publishDate) : new Date(0);
+    
+    // Sort by date descending (newest first)
+    if (dateA.getTime() !== dateB.getTime()) {
+      return dateB.getTime() - dateA.getTime();
+    }
+    // Fallback to title sorting if dates are equal or missing
+    return a.data.title.localeCompare(b.data.title);
+  });
+
+// Base path from astro.config.mjs or env
+const base = import.meta.env.BASE_URL || '/website';
+const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
+
+// Helper to extract YouTube ID from MDX body
+function getYouTubeId(body) {
+  if (!body) return null;
+  const match = body.match(/<YouTube\s+id=["']([^"']+)["']/);
+  return match ? match[1] : null;
+}
+
+// Helper to format date
+function formatDate(dateStr) {
+  if (!dateStr) return null;
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+}
+---
+
+<div class="my-12">
+  {pages.slice(0, 10).map((page, index) => {
+    const slug = page.id.replace(/\.mdx?$/, '');
+    const href = `${cleanBase}/${slug}/`;
+    const youtubeId = getYouTubeId(page.body);
+    const thumbnailUrl = youtubeId ? `https://i.ytimg.com/vi/${youtubeId}/maxresdefault.jpg` : null;
+    const formattedDate = formatDate(page.data.publishDate);
+    
+    return (
+      <>
+        {index > 0 && (
+          <div style="margin: 3rem 0;">
+            <div style="height: 2px; background: linear-gradient(to right, transparent, rgb(139, 92, 246), transparent);"></div>
+          </div>
+        )}
+        
+        <div style="margin-bottom: 4rem;">
+          <a 
+            href={href}
+            class="no-underline group relative block"
+          >
+            <div class="overflow-hidden transition-all duration-300 rounded-xl border-2 border-violet-500 dark:border-violet-400 bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-800 hover:shadow-2xl hover:shadow-violet-500/30 dark:hover:shadow-violet-500/40 hover:-translate-y-1 flex flex-col md:flex-row p-0">
+              
+              {thumbnailUrl ? (
+                <div class="relative md:w-2/5 aspect-video md:aspect-auto overflow-hidden">
+                  <img 
+                    src={thumbnailUrl} 
+                    alt={page.data.title}
+                    class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                    onerror="this.src='https://i.ytimg.com/vi/' + this.src.split('/').pop().replace('maxresdefault.jpg', 'hqdefault.jpg')"
+                  />
+                  <div class="absolute top-4 right-4 px-3 py-1.5 bg-violet-600 text-white text-xs font-bold rounded-lg uppercase tracking-wider shadow-lg">
+                    📹 Video
+                  </div>
+                </div>
+              ) : (
+                <div class="relative md:w-2/5 h-48 md:h-auto bg-gradient-to-br from-violet-100 to-indigo-100 dark:from-violet-900/30 dark:to-indigo-900/30 flex items-center justify-center">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-violet-500 dark:text-violet-400 opacity-50">
+                      <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                   <div class="absolute top-4 right-4 px-3 py-1.5 bg-slate-800 text-white text-xs font-bold rounded-lg uppercase tracking-wider shadow-lg">
+                    📄 Article
+                  </div>
+                </div>
+              )}
+
+              <div class="p-6 md:p-8 flex flex-col flex-grow md:w-3/5">
+                {formattedDate && (
+                  <div class="mb-3">
+                    <span class="inline-block text-xs font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-wider">
+                      📅 {formattedDate}
+                    </span>
+                  </div>
+                )}
+                
+                <h3 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors duration-300 leading-tight">
+                  {page.data.title}
+                </h3>
+                {page.data.description && (
+                  <p class="text-slate-600 dark:text-slate-400 text-base leading-relaxed">
+                    {page.data.description}
+                  </p>
+                )}
+              </div>
+            </div>
+          </a>
+        </div>
+      </>
+    );
+  })}
+</div>
+
+{pages.length > 10 && (
+  <div class="text-center my-12 p-8 bg-violet-50 dark:bg-violet-950/30 rounded-2xl border-2 border-violet-300 dark:border-violet-700">
+    <p class="text-slate-700 dark:text-slate-300 text-lg mb-4">
+      Showing 10 of {pages.length} items
+    </p>
+    <p class="text-slate-600 dark:text-slate-400 text-sm">
+      More items will be displayed as pagination is implemented
+    </p>
+  </div>
+)}
+
+<style>
+  .no-underline {
+    text-decoration: none !important;
+  }
+</style>

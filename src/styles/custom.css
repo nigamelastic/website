@@ -1,0 +1,230 @@
+:root {
+    /* Brand Colors - Cyberpunk Violet */
+    --brand-violet: #7c3aed;
+    /* Primary Violet */
+    --brand-violet-dark: #5b21b6;
+    /* Deep Violet */
+    --brand-violet-light: #a78bfa;
+    /* Lighter Violet */
+    --brand-glow: #8b5cf680;
+    /* Glow color with opacity */
+
+    /* Secondary Accent - Cyber Cyan */
+    --brand-cyan: #06b6d4;
+
+    /* Starlight Overrides - Base */
+    --sl-color-accent: var(--brand-violet-light);
+    --sl-color-accent-high: #ddd6fe;
+    --sl-color-accent-low: #2e1065;
+    --sl-font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Light Theme - Clean & Crisp */
+[data-theme='light'] {
+    --sl-color-bg: #fafafa;
+    --sl-color-bg-nav: #ffffffcc;
+    /* Glass nav */
+    --sl-color-bg-sidebar: #f4f4f5;
+    --sl-color-text: #18181b;
+    --sl-color-text-accent: #5b21b6;
+    --sl-color-hairline: #e4e4e7;
+    --sl-color-accent: #6d28d9;
+}
+
+/* Dark Theme - Premium Dark Mode */
+[data-theme='dark'] {
+    --sl-color-bg: #09090b;
+    /* Zinc 950 - softer than pure black */
+    --sl-color-bg-nav: #09090bcc;
+    --sl-color-bg-sidebar: #0c0c0e;
+    --sl-color-text: #f4f4f5;
+    --sl-color-hairline: #27272a;
+    --sl-color-accent: #a78bfa;
+}
+
+/* --- HERO SECTION --- */
+.hero {
+    position: relative;
+    z-index: 1;
+}
+
+/* Add a subtle background glow to hero */
+[data-theme='dark'] .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 80%;
+    height: 100%;
+    background: radial-gradient(circle, var(--brand-glow) 0%, transparent 70%);
+    opacity: 0.2;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.hero h1 {
+    font-weight: 800 !important;
+    background: linear-gradient(to right, var(--brand-violet-light), var(--brand-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px var(--brand-glow);
+}
+
+[data-theme='light'] .hero h1 {
+    background: linear-gradient(to right, #6d28d9, #0891b2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+}
+
+/* --- BUTTONS --- */
+.sl-link-button {
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Primary Button - Gradient */
+.sl-link-button.primary {
+    background: linear-gradient(135deg, var(--brand-violet), var(--brand-violet-dark)) !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 4px 15px var(--brand-glow);
+}
+
+.sl-link-button.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--brand-glow);
+}
+
+/* Secondary Button - Outline Glass */
+.sl-link-button.secondary {
+    background: transparent !important;
+    color: var(--sl-color-text) !important;
+    border: 1px solid var(--sl-color-hairline) !important;
+}
+
+.sl-link-button.secondary:hover {
+    border-color: var(--brand-violet);
+    background: rgba(139, 92, 246, 0.1) !important;
+    color: var(--brand-violet) !important;
+}
+
+/* --- CARDS (The "Squares") --- */
+.card-grid {
+    gap: 1.5rem !important;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.03) !important;
+    /* Extremely subtle fill */
+    border: 1px solid var(--sl-color-hairline) !important;
+    border-radius: 12px !important;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Light mode card override */
+[data-theme='light'] .card {
+    background: rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Card Hover Effects */
+.card:hover {
+    transform: translateY(-5px);
+    border-color: var(--brand-violet);
+    box-shadow: 0 10px 30px -10px var(--brand-glow);
+}
+
+/* Card Title */
+.card .title {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    color: var(--sl-color-text) !important;
+}
+
+/* Card Icon Box */
+.card .icon {
+    background: linear-gradient(135deg, var(--brand-violet-dark), var(--brand-violet));
+    padding: 8px;
+    border-radius: 8px;
+    color: white !important;
+    margin-bottom: 0.5rem;
+}
+
+/* --- SIDEBAR --- */
+.sidebar-content a {
+    border-radius: 6px !important;
+    transition: background-color 0.2s;
+}
+
+.sidebar-content a[aria-current="page"],
+.sidebar-content a:hover {
+    color: var(--brand-violet-light) !important;
+    background: rgba(139, 92, 246, 0.1) !important;
+}
+
+[data-theme='light'] .sidebar-content a[aria-current="page"],
+[data-theme='light'] .sidebar-content a:hover {
+    color: #6d28d9 !important;
+}
+
+/* Ensure Logo is Round and Visible */
+.site-title img,
+.hero img {
+    border-radius: 50% !important;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border: 2px solid var(--sl-color-accent);
+    mask-image: radial-gradient(white, black);
+    /* Force clipping for webkit */
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+}
+
+/* Specific hero image targeting to override strict starlight styles */
+.hero .hero-image img {
+    border-radius: 50% !important;
+}
+
+/* --- UTILS --- */
+/* Fix visibility issues in light mode for content */
+[data-theme='light'] .content-panel h1,
+[data-theme='light'] .content-panel h2,
+[data-theme='light'] .content-panel h3 {
+    color: #111827;
+}
+
+[data-theme='light'] p {
+    color: #374151;
+}
+
+/* --- MOBILE LAYOUT FIXES --- */
+/* Move the mobile preferences (theme switcher, social) to the top of the sidebar */
+@media (max-width: 50rem) {
+    .sidebar-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Target the wrapper div that contains .mobile-preferences */
+    /* Starlight wraps this in a div that is hidden on desktop (md:sl-hidden) */
+    .sidebar-content>div:has(.mobile-preferences) {
+        order: -1;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--sl-color-hairline);
+        width: 100%;
+    }
+
+    /* Ensure flex layout for the preferences themselves */
+    .mobile-preferences {
+        justify-content: space-between !important;
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+}

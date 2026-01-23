@@ -1,0 +1,46 @@
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.env
+.env.*
+!.env.example
+*.env
+.secrets
+secrets.*
+credentials.*
+*.credentials
+auth.json
+*.pem
+*.key
+*.pub
+*.cert
+*.pfx
+*.p12
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+.pnpm-store
+.turbo
+
+# Build artifacts
+dist/
+.astro/
+*.log
+test-results/
+
+# Environment files
+.env
+*.env
+*.code-workspace
+
+# Editor and OS files
+.idea
+.vscode-test/
+.eslintcache
+guides/

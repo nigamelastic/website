@@ -1,0 +1,20 @@
+{
+  "name": "nuclear-nebula",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.37.2",
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^5.6.1",
+    "astro-embed": "^0.12.0",
+    "sharp": "^0.34.2",
+    "tailwindcss": "^4.1.18"
+  }
+}

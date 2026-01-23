@@ -1,0 +1,55 @@
+---
+title: "Nigamelastic: Lil Tech, Much Wow!! "
+description: Practical Cybersecurity, Hacking, and Automation.
+template: splash
+hero:
+  tagline: "Cybersecurity, Hacking, and Automation."
+  image:
+    file: ../../assets/logo.jpg
+  actions:
+    - text: Knowledge Base
+      link: /website/knowledge-base/ai-hacking/
+      icon: right-arrow
+      variant: primary
+    - text: Watch on YouTube
+      link: /website/youtube/
+      icon: external
+      variant: secondary
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+## Explore
+
+<CardGrid stagger>
+	<LinkCard
+		title="Knowledge Base"
+		description="Dive into AI Hacking, Mobile Hacking, and Webapp Hacking."
+		href="/website/knowledge-base/ai-hacking/"
+		icon="document"
+	/>
+	<LinkCard
+		title="Writeups"
+		description="Detailed writeups for CTFs and HackTheBox machines."
+		href="/website/writeups/"
+		icon="pencil"
+	/>
+	<LinkCard
+		title="YouTube"
+		description="Check out my latest videos on cybersecurity and tech."
+		href="/website/youtube/"
+		icon="youtube"
+	/>
+	<LinkCard
+		title="News"
+		description="Latest curated cybersecurity news and updates."
+		href="/website/news/"
+		icon="open-book"
+	/>
+	<LinkCard
+		title="About"
+		description="Learn more about me and my experience."
+		href="/website/about/"
+		icon="information"
+	/>
+</CardGrid>
