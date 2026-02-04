@@ -26,6 +26,10 @@ export default defineConfig({
             ],
             sidebar: [
                 {
+                    label: 'Guides',
+                    autogenerate: { directory: 'guides' },
+                },
+                {
                     label: 'YouTube',
                     autogenerate: { directory: 'youtube' },
                     collapsed: true,

@@ -1,0 +1,64 @@
+---
+interface Props {
+  title: string;
+  link: string;
+  pubDate: string;
+  contentSnippet: string;
+  source: string;
+}
+
+const { title, link, pubDate, contentSnippet, source } = Astro.props;
+
+const formattedDate = new Date(pubDate).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+---
+
+<div style="margin-bottom: 4rem;">
+  <a 
+    href={link} 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    class="no-underline group relative block"
+  >
+    <div class="overflow-hidden transition-all duration-300 rounded-xl border-2 border-violet-500 dark:border-violet-400 bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-800 hover:shadow-2xl hover:shadow-violet-500/30 dark:hover:shadow-violet-500/40 hover:-translate-y-1 flex flex-col md:flex-row p-0">
+      
+      <div class="relative md:w-2/5 h-48 md:h-auto bg-gradient-to-br from-violet-100 to-indigo-100 dark:from-violet-900/30 dark:to-indigo-900/30 flex items-center justify-center overflow-hidden">
+         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-violet-500 dark:text-violet-400 opacity-50">
+            <path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z" />
+            <path d="M14 2v6h6" />
+            <path d="M16 13H8" />
+            <path d="M16 17H8" />
+            <path d="M10 9H8" />
+          </svg>
+         <div class="absolute top-4 right-4 px-3 py-1.5 bg-violet-600 text-white text-xs font-bold rounded-lg uppercase tracking-wider shadow-lg">
+          📰 {source}
+        </div>
+      </div>
+
+      <div class="p-6 md:p-8 flex flex-col flex-grow md:w-3/5">
+        <div class="mb-3">
+          <span class="inline-block text-xs font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-wider">
+            📅 {formattedDate}
+          </span>
+        </div>
+        
+        <h3 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors duration-300 leading-tight">
+          {title}
+        </h3>
+        
+        <p class="text-slate-600 dark:text-slate-400 text-base leading-relaxed line-clamp-3">
+          {contentSnippet}
+        </p>
+      </div>
+    </div>
+  </a>
+</div>
+
+<style>
+  .no-underline {
+    text-decoration: none !important;
+  }
+</style>
