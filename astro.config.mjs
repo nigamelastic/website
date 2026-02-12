@@ -40,11 +40,6 @@ export default defineConfig({
                     collapsed: true,
                 },
                 {
-                    label: 'CTF',
-                    autogenerate: { directory: 'ctf' },
-                    collapsed: true,
-                },
-                {
                     label: 'Writeups',
                     autogenerate: { directory: 'writeups' },
                     collapsed: true,
