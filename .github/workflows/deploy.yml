@@ -10,6 +10,8 @@ on:
         description: 'Commit SHA to deploy (leave empty for latest)'
         required: false
         default: ''
+  schedule:
+    - cron: '0 0 * * *'  # Runs at 00:00 UTC every day
 
 permissions:
   contents: read
