@@ -1,6 +1,7 @@
 ---
 import NewsCard from './NewsCard.astro';
 import Parser from 'rss-parser';
+import { sanitizeUrl } from '../utils/security';
 
 type NewsItem = {
   title: string;
@@ -23,7 +24,7 @@ try {
       const parsed = await parser.parseURL(feed.url);
       return parsed.items.map((item) => ({
         title: item.title || 'No Title',
-        link: item.link || '#',
+        link: sanitizeUrl(item.link || '#'),
         pubDate: item.pubDate || '',
         contentSnippet: item.contentSnippet || '',
         source: feed.name,
