@@ -40,11 +40,6 @@ export default defineConfig({
                     collapsed: true,
                 },
                 {
-                    label: 'Writeups',
-                    autogenerate: { directory: 'writeups' },
-                    collapsed: true,
-                },
-                {
                     label: 'About',
                     slug: 'about',
                 },
