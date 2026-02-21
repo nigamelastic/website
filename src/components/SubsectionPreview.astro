@@ -8,12 +8,10 @@ interface Props {
 const { directory } = Astro.props;
 
 // Fetch all docs and filter by the specified directory
-const allDocs = await getCollection('docs');
-const pages = allDocs
-  .filter(page => {
+const pages = (await getCollection('docs', (page) => {
     // Ensure it's in the right directory and NOT the index page itself
     return page.id.startsWith(directory + '/') && !page.id.endsWith('index.mdx');
-  })
+  }))
   .sort((a, b) => {
     const dateA = a.data.publishDate ? new Date(a.data.publishDate) : new Date(0);
     const dateB = b.data.publishDate ? new Date(b.data.publishDate) : new Date(0);
