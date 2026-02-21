@@ -1,4 +1,6 @@
 ---
+import { formatDate } from '../utils/date';
+
 interface Props {
   title: string;
   link: string;
@@ -9,11 +11,7 @@ interface Props {
 
 const { title, link, pubDate, contentSnippet, source } = Astro.props;
 
-const formattedDate = new Date(pubDate).toLocaleDateString('en-US', {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-});
+const formattedDate = formatDate(pubDate);
 ---
 
 <div style="margin-bottom: 4rem;">
