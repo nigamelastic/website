@@ -9,6 +9,7 @@ type NewsItem = {
   contentSnippet: string;
   source: string;
   isoDate?: string;
+  timestamp?: number;
 };
 
 const parser = new Parser();
@@ -21,14 +22,24 @@ try {
   const feedPromises = FEEDS.map(async (feed) => {
     try {
       const parsed = await parser.parseURL(feed.url);
-      return parsed.items.map((item) => ({
-        title: item.title || 'No Title',
-        link: item.link || '#',
-        pubDate: item.pubDate || '',
-        contentSnippet: item.contentSnippet || '',
-        source: feed.name,
-        isoDate: item.isoDate,
-      }));
+      return parsed.items.map((item) => {
+        const fullSnippet = item.contentSnippet || '';
+        const MAX_SNIPPET_LENGTH = 350;
+        const truncatedSnippet =
+          fullSnippet.length > MAX_SNIPPET_LENGTH
+            ? fullSnippet.slice(0, MAX_SNIPPET_LENGTH) + '...'
+            : fullSnippet;
+
+        return {
+          title: item.title || 'No Title',
+          link: item.link || '#',
+          pubDate: item.pubDate || '',
+          contentSnippet: truncatedSnippet,
+          source: feed.name,
+          isoDate: item.isoDate,
+          timestamp: new Date(item.isoDate || item.pubDate || 0).getTime(),
+        };
+      });
     } catch (error) {
       console.error(`Error fetching feed ${feed.name}:`, error);
       return [];
@@ -40,9 +51,7 @@ try {
 
   // Sort by date (newest first)
   const sortedNews = flattenedResults.sort((a, b) => {
-    const dateA = new Date(a.isoDate || a.pubDate || 0);
-    const dateB = new Date(b.isoDate || b.pubDate || 0);
-    return dateB.getTime() - dateA.getTime();
+    return (b.timestamp || 0) - (a.timestamp || 0);
   });
 
   // Limit to latest 30 items
