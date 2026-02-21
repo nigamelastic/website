@@ -1,52 +1,11 @@
 ---
 import NewsCard from './NewsCard.astro';
-import Parser from 'rss-parser';
-
-type NewsItem = {
-  title: string;
-  link: string;
-  pubDate: string;
-  contentSnippet: string;
-  source: string;
-  isoDate?: string;
-};
-
-const parser = new Parser();
-
-import { FEEDS } from '../data/news-feeds';
+import { fetchNewsFeeds, type NewsItem } from '../utils/news-feed';
 
 let news: NewsItem[] = [];
 
 try {
-  const feedPromises = FEEDS.map(async (feed) => {
-    try {
-      const parsed = await parser.parseURL(feed.url);
-      return parsed.items.map((item) => ({
-        title: item.title || 'No Title',
-        link: item.link || '#',
-        pubDate: item.pubDate || '',
-        contentSnippet: item.contentSnippet || '',
-        source: feed.name,
-        isoDate: item.isoDate,
-      }));
-    } catch (error) {
-      console.error(`Error fetching feed ${feed.name}:`, error);
-      return [];
-    }
-  });
-
-  const results = await Promise.all(feedPromises);
-  const flattenedResults = results.flat() as NewsItem[];
-
-  // Sort by date (newest first)
-  const sortedNews = flattenedResults.sort((a, b) => {
-    const dateA = new Date(a.isoDate || a.pubDate || 0);
-    const dateB = new Date(b.isoDate || b.pubDate || 0);
-    return dateB.getTime() - dateA.getTime();
-  });
-
-  // Limit to latest 30 items
-  news = sortedNews.slice(0, 30);
+  news = await fetchNewsFeeds();
 } catch (error) {
   console.error('Failed to fetch news feeds:', error);
 }
